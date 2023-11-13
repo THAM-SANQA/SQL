@@ -69,7 +69,23 @@ FROM number_data_types;
 -- Does not work:
 SELECT CAST(char_column AS integer) FROM char_data_types;
 
-dt
 
+--------------------------------------------------------------
+-- Try it yourself
+--------------------------------------------------------------
+
+-- Question 1:
+numeric(4,1)
+-- Allows the distance to go to a value of 999.9, capped at that distance.
+
+-- Question 2: 
+varchar(50)
+-- 50 characters is a reasonable length for names, and varchar() ensures there'll
+-- be no wasted space.
+
+-- Question 3: 
+SELECT CAST('4//2017' AS timestamp with time zone);
+-- Attempting to convert a string that is not in the accepted date/time formats 
+-- will result in an error.
 
 
