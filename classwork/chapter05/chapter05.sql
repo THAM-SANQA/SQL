@@ -16,6 +16,16 @@ SELECT sqrt(10); -- square root (function)
 SELECT ||/ 10;   -- cube root
 -- the code below does not run
 SELECT 4!;      -- factorial
+-- factorial fix
+WITH RECURSIVE factorial(n, result) AS (
+  SELECT 4, 1  -- Set the number for which you want to calculate the factorial
+  UNION ALL -- recursively call the factorial with n-- and updating the result *= n
+  SELECT n - 1, result * n
+  FROM factorial
+  WHERE n > 1 -- ensures that the recursion stops when n >= to 1
+)
+SELECT result FROM factorial WHERE n = 1;
+
 
 -- Order of operations
 SELECT 7 + 8 * 9; 	-- answer: 79
