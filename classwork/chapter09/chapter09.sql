@@ -214,17 +214,50 @@ WHERE company = 'AGRO Merchants Oakland, LLC';
 
 COMMIT;
 
--- Listing 9-25: Backing up a table while adding and filling a new column
-
+-- Backing up a table while adding and filling a new column
 CREATE TABLE meat_poultry_egg_inspect_backup AS
 SELECT *,
        '2018-02-07'::date AS reviewed_date
 FROM meat_poultry_egg_inspect;
 
--- Listing 9-26: Swapping table names using ALTER TABLE
-
+-- Swapping table names using ALTER TABLE
 ALTER TABLE meat_poultry_egg_inspect RENAME TO meat_poultry_egg_inspect_temp;
 ALTER TABLE meat_poultry_egg_inspect_backup RENAME TO meat_poultry_egg_inspect;
 ALTER TABLE meat_poultry_egg_inspect_temp RENAME TO meat_poultry_egg_inspect_backup;
+
+-- CHAPTER 9: I nspecting and Modifying Data
+--------------------------------------------------------------
+-- Try it yourself
+--------------------------------------------------------------
+
+-- QUESTION 1:
+ALTER TABLE meat_poultry_egg_inspect ADD COLUMN meat_processing boolean;
+ALTER TABLE meat_poultry_egg_inspect ADD COLUMN poultry_processing boolean;
+
+SELECT * FROM meat_poultry_egg_inspect; -- view table with new empty columns
+
+-- QUESTION 2:
+UPDATE meat_poultry_egg_inspect
+SET meat_processing = TRUE
+WHERE activities ILIKE '%meat processing%'; -- case-insensitive match with wildcards
+
+UPDATE meat_poultry_egg_inspect
+SET poultry_processing = TRUE
+WHERE activities ILIKE '%poultry processing%'; -- case-insensitive match with wildcards
+
+-- QUESTION 3:
+SELECT * FROM meat_poultry_egg_inspect;
+
+-- QUESTION 3-1:
+SELECT count(meat_processing), count(poultry_processing)
+FROM meat_poultry_egg_inspect;
+
+-- QUESTION 3-2:
+SELECT count(*)
+FROM meat_poultry_egg_inspect
+WHERE meat_processing = TRUE AND
+      poultry_processing = TRUE;
+
+
 
 
