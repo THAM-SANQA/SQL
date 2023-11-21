@@ -197,52 +197,30 @@ CREATE TABLE songs (
 -- Try it yourself
 --------------------------------------------------------------
 -- QUESTION 1.
-
 CREATE TABLE albums (
     album_id bigserial,
     album_catalog_code varchar(100) NOT NULL,
-    album_title text NOT NULL,
-    album_artist text NOT NULL,
+    album_title text NOT NULL, -- title cannot be empty
+    album_artist text NOT NULL, -- every song has an artist
     album_release_date date,
     album_genre varchar(40),
     album_description text,
-    CONSTRAINT album_id_key PRIMARY KEY (album_id),
-    CONSTRAINT release_date_check CHECK (album_release_date > '1/1/1925')
+    CONSTRAINT album_id_key PRIMARY KEY (album_id), -- primary key using surrogate key id values
+    CONSTRAINT release_date_check CHECK (album_release_date > '1/1/1925') -- availabity of LP's
 );
 
 CREATE TABLE songs (
     song_id bigserial,
     song_title text NOT NULL,
     song_artist text NOT NULL,
-    album_id bigint REFERENCES albums (album_id),
-    CONSTRAINT song_id_key PRIMARY KEY (song_id)
+    album_id bigint REFERENCES albums (album_id), -- foreign key referencing
+    CONSTRAINT song_id_key PRIMARY KEY (song_id) -- primary key using surrogate key id values
 );
 
--- Answers:
--- a) Both tables get a primary key using surrogate key id values that are
--- auto-generated via serial data types.
-
--- b) The songs table references albums via a foreign key constraint.
-
--- c) In both tables, the title and artist columns cannot be empty, which
--- is specified via a NOT NULL constraint. We assume that every album and
--- song should at minimum have that information.
-
--- d) In albums, the album_release_date column has a CHECK constraint
--- because it would be likely impossible for us to own an LP made before 1925.
-
-
--- QUESTION 2. Instead of using album_id as a surrogate key for your primary key, are
--- there any columns in albums that could be useful as a natural key? What would
--- you have to know to decide?
-
--- Answer:
--- We could consider the album_catalog_code. We would have to answer yes to
--- these questions:
--- - Is it going to be unique across all albums released by all companies?
--- - Will we always have one?
-
-
+-- QUESTION 2. 
+-- album_catalog_code can be used as a natural key as it in a unique identifier for each release
+-- and it is required with each release.
+ 
 -- QUESTION 3. To speed up queries, which columns are good candidates for indexes?
 
 -- Answer:
