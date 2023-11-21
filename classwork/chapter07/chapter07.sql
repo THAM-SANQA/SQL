@@ -221,13 +221,7 @@ CREATE TABLE songs (
 -- album_catalog_code can be used as a natural key as it in a unique identifier for each release
 -- and it is required with each release.
  
--- QUESTION 3. To speed up queries, which columns are good candidates for indexes?
-
--- Answer:
--- Primary key columns get indexes by default, but we should add an index
--- to the album_id foreign key column in the songs table because we'll use
--- it in table joins. It's likely that we'll query these tables to search
--- by titles and artists, so those columns in both tables should get indexes
--- too. The album_release_date in albums also is a candidate if we expect
--- to perform many queries that include date ranges.
+-- QUESTION 3.
+-- The album_id, titles and artists can be used as they can query both tables
+-- The album_release_date can be used when querying date ranges
 
