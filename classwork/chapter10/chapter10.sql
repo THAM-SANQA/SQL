@@ -157,3 +157,61 @@ ORDER BY (property_crime::numeric / population) DESC;
 -- Try it yourself
 --------------------------------------------------------------
 
+-- QUESTION 1.
+-- The `r` for bachelors is higher than that of master's or higher
+-- as obtaining a master's or higher comes with a higher increment in income
+-- than obtaining a bachelor's
+SELECT
+    round(
+      corr(median_hh_income, pct_bachelors_higher)::numeric, 2
+      ) AS bachelors_income_r,
+    round(
+      corr(median_hh_income, pct_masters_higher)::numeric, 2
+      ) AS masters_income_r
+FROM acs_2011_2015_stats;
+
+
+-- QUESTION 2. 
+-- a) Milwaukee and Albuquerque had the two highest rates of motor
+-- vehicle theft:
+SELECT
+    city,
+    st,
+    population,
+    motor_vehicle_theft,
+    round(
+        (motor_vehicle_theft::numeric / population) * 100000, 1
+        ) AS vehicle_theft_per_100000
+FROM fbi_crime_data_2015
+WHERE population >= 500000
+ORDER BY vehicle_theft_per_100000 DESC;
+
+-- b) Detroit and Memphis had the two highest rates of violent crime.
+SELECT
+    city,
+    st,
+    population,
+    violent_crime,
+    round(
+        (violent_crime::numeric / population) * 100000, 1
+        ) AS violent_crime_per_100000
+FROM fbi_crime_data_2015
+WHERE population >= 500000
+ORDER BY violent_crime_per_100000 DESC;
+
+-- QUESTION 3.
+-- Cuyahoga County Public Library tops the rankings
+SELECT
+    libname,
+    stabr,
+    visits,
+    popu_lsa,
+    round(
+        (visits::numeric / popu_lsa) * 1000, 0
+        ) AS visits_per_1000,
+    rank() OVER (ORDER BY (visits::numeric / popu_lsa) * 1000 DESC)
+FROM pls_fy2014_pupld14a
+WHERE popu_lsa >= 250000;
+
+
+
