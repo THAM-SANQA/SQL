@@ -1,3 +1,5 @@
+SET datestyle = 'MDY'
+
 -- Case formatting
 SELECT upper('Neal7');
 SELECT lower('Randy');
