@@ -211,7 +211,6 @@ SELECT array_length(regexp_split_to_array('Phil Mike Tony Steve', ' '), 1);
 
 
 -- FULL TEXT SEARCH
-
 -- Full-text search operators:
 -- & (AND)
 -- | (OR)
@@ -229,12 +228,6 @@ SELECT to_tsvector('I am walking across the sitting room') @@ to_tsquery('walkin
 SELECT to_tsvector('I am walking across the sitting room') @@ to_tsquery('walking & running');
 
 -- Creating and filling the president_speeches table
-
--- Sources:
--- https://archive.org/details/State-of-the-Union-Addresses-1945-2006
--- http://www.presidency.ucsb.edu/ws/index.php
--- https://www.eisenhower.archives.gov/all_about_ike/speeches.html
-
 CREATE TABLE president_speeches (
     sotu_id serial PRIMARY KEY,
     president varchar(100) NOT NULL,
