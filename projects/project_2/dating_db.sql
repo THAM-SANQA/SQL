@@ -223,17 +223,20 @@ VALUES
 	
 
 INSERT INTO contact_interest (contact_id, interest_id)
-SELECT contact_id, interest_id
+SELECT
+    contact_id,
+    interest_id
 FROM (
     SELECT
         contact_id,
         interest_id,
-        ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY random()) as row_num
+        ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY RANDOM()) as row_num
     FROM
         generate_series(1, 16) AS contact_id,
         generate_series(81, 88) AS interest_id
 ) AS subquery
 WHERE row_num <= 3;
+
 
 ALTER TABLE IF EXISTS public.contact_seeking
     RENAME COLUMN conact_id TO contact_id;
@@ -267,5 +270,26 @@ SELECT * FROM seeking;
 
 SELECT * FROM contact_interest;
 SELECT * FROM contact_seeking;
-DELETE FROM my_contacts;
+DELETE FROM contact_interest;
+
+SELECT
+    mc.contact_id,
+    mc.last_name,
+    mc.first_name,
+    p.profession,
+    z.zip_code,
+    z.city,
+    z.province,
+    st.status,
+    it.interest,
+    se.seeking
+FROM
+    my_contacts mc
+LEFT JOIN profession p ON mc.prof_id = p.prof_id
+LEFT JOIN zip_code z ON mc.zip_code = z.zip_code
+LEFT JOIN status st ON mc.status_id = st.status_id
+LEFT JOIN contact_interest ci ON mc.contact_id = ci.contact_id
+LEFT JOIN interests it ON ci.interest_id = it.interest_id
+LEFT JOIN contact_seeking cs ON mc.contact_id = cs.contact_id
+LEFT JOIN seeking se ON cs.seeking_id = se.seeking_id;
 
