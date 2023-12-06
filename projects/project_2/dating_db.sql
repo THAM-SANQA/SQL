@@ -260,7 +260,6 @@ VALUES --41:45
 	(15, 45), 
 	(16, 41);
 
-
 SELECT * FROM my_contacts;
 SELECT * FROM profession;
 SELECT * FROM zip_code;
