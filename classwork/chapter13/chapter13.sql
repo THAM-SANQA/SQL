@@ -331,7 +331,7 @@ LIMIT 5;
 -- QUESTION 1: 
 SELECT replace('Williams, Sr.', ', ', ' ');
 -- same output
--- SELECT regexp_replace('Williams, Sr.', ', ', ' ');
+-- SELECT regexp_replace('Alvarez, Jr.', ', ', ' ');
 
 -- To capture just the suffixes, search for characters after a comma
 -- and space and place those inside a match group:
