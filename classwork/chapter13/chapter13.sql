@@ -335,7 +335,7 @@ SELECT replace('Williams, Sr.', ', ', ' ');
 
 -- To capture just the suffixes, search for characters after a comma
 -- and space and place those inside a match group:
-SELECT (regexp_match('Williams, Sr.', '.*, (.*)'))[1];
+SELECT (regexp_match('Alvarez, Jr.', '.*, (.*)'))[1];
 
 -- QUESTION 2:
 WITH
