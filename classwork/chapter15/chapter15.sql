@@ -1,14 +1,7 @@
 --------------------------------------------------------------
--- Practical SQL: A Beginner's Guide to Storytelling with Data
--- by Anthony DeBarros
-
 -- Chapter 15 Code Examples
 --------------------------------------------------------------
-
--- VIEWS
-
 -- Listing 15-1: Creating a view that displays Nevada 2010 counties
-
 CREATE OR REPLACE VIEW nevada_counties_pop_2010 AS
     SELECT geo_name,
            state_fips,
@@ -19,13 +12,11 @@ CREATE OR REPLACE VIEW nevada_counties_pop_2010 AS
     ORDER BY county_fips;
 
 -- Listing 15-2: Querying the nevada_counties_pop_2010 view
-
 SELECT *
 FROM nevada_counties_pop_2010
 LIMIT 5;
 
 -- Listing 15-3: Creating a view showing population change for US counties
-
 CREATE OR REPLACE VIEW county_pop_change_2010_2000 AS
     SELECT c2010.geo_name,
            c2010.state_us_abbreviation AS st,
@@ -41,7 +32,6 @@ CREATE OR REPLACE VIEW county_pop_change_2010_2000 AS
     ORDER BY c2010.state_fips, c2010.county_fips;
 
 -- Listing 15-4: Selecting columns from the county_pop_change_2010_2000 view
-
 SELECT geo_name,
        st,
        pop_2010,
@@ -51,7 +41,6 @@ WHERE st = 'NV'
 LIMIT 5;
 
 -- Listing 15-5: Creating a view on the employees table
-
 CREATE OR REPLACE VIEW employees_tax_dept AS
      SELECT emp_id,
             first_name,
@@ -65,7 +54,6 @@ CREATE OR REPLACE VIEW employees_tax_dept AS
 SELECT * FROM employees_tax_dept;
 
 -- Listing 15-6: Successful and rejected inserts via the employees_tax_dept view
-
 INSERT INTO employees_tax_dept (first_name, last_name, dept_id)
 VALUES ('Suzanne', 'Legere', 1);
 
@@ -78,7 +66,6 @@ SELECT * FROM employees_tax_dept;
 SELECT * FROM employees;
 
 -- Listing 15-7: Updating a row via the employees_tax_dept view
-
 UPDATE employees_tax_dept
 SET last_name = 'Le Gere'
 WHERE emp_id = 5;
@@ -91,7 +78,6 @@ SET salary = 100000
 WHERE emp_id = 5;
 
 -- Listing 15-8: Deleting a row via the employees_tax_dept view
-
 DELETE FROM employees_tax_dept
 WHERE emp_id = 5;
 
@@ -101,7 +87,6 @@ WHERE emp_id = 5;
 
 -- Listing 15-9: Creating a percent_change function
 -- To delete this function: DROP FUNCTION percent_change(numeric,numeric,integer);
-
 CREATE OR REPLACE FUNCTION
 percent_change(new_value numeric,
                old_value numeric,
@@ -115,11 +100,9 @@ IMMUTABLE
 RETURNS NULL ON NULL INPUT;
 
 -- Listing 15-10: Testing the percent_change() function
-
 SELECT percent_change(110, 108, 2);
 
 -- Listing 15-11: Testing percent_change() on Census data
-
 SELECT c2010.geo_name,
        c2010.state_us_abbreviation AS st,
        c2010.p0010001 AS pop_2010,
@@ -133,7 +116,6 @@ ORDER BY pct_chg_func DESC
 LIMIT 5;
 
 -- Listing 15-12: Adding a column to the teachers table and seeing the data
-
 ALTER TABLE teachers ADD COLUMN personal_days integer;
 
 SELECT first_name,
@@ -143,7 +125,6 @@ SELECT first_name,
 FROM teachers;
 
 -- Listing 15-13: Creating an update_personal_days() function
-
 CREATE OR REPLACE FUNCTION update_personal_days()
 RETURNS void AS $$
 BEGIN
@@ -162,11 +143,9 @@ $$ LANGUAGE plpgsql;
 SELECT update_personal_days();
 
 -- Listing 15-14: Enabling the PL/Python procedural language
-
 CREATE EXTENSION plpythonu;
 
 -- Listing 15-15: Using PL/Python to create the trim_county() function
-
 CREATE OR REPLACE FUNCTION trim_county(input_string text)
 RETURNS text AS $$
     import re
@@ -175,7 +154,6 @@ RETURNS text AS $$
 $$ LANGUAGE plpythonu;
 
 -- Listing 15-16: Testing the trim_county() function
-
 SELECT geo_name,
        trim_county(geo_name)
 FROM us_counties_2010
@@ -184,9 +162,7 @@ LIMIT 5;
 
 
 -- TRIGGERS
-
 -- Listing 15-17: Creating the grades and grades_history tables
-
 CREATE TABLE grades (
     student_id bigint,
     course_id bigint,
@@ -213,7 +189,6 @@ PRIMARY KEY (student_id, course_id, change_time)
 );  
 
 -- Listing 15-18: Creating the record_if_grade_changed() function
-
 CREATE OR REPLACE FUNCTION record_if_grade_changed()
     RETURNS trigger AS
 $$
@@ -239,7 +214,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Listing 15-19: Creating the grades_update trigger
-
 CREATE TRIGGER grades_update
   AFTER UPDATE
   ON grades
@@ -247,7 +221,6 @@ CREATE TRIGGER grades_update
   EXECUTE PROCEDURE record_if_grade_changed();
 
 -- Listing 15-20: Testing the grades_update trigger
-
 -- Initially, there should be 0 records in the history
 SELECT * FROM grades_history;
 
@@ -268,7 +241,6 @@ SELECT student_id,
 FROM grades_history;
 
 -- Listing 15-21: Creating a temperature_test table
-
 CREATE TABLE temperature_test (
     station_name varchar(50),
     observation_date date,
@@ -279,7 +251,6 @@ PRIMARY KEY (station_name, observation_date)
 );
 
 -- Listing 15-22: Creating the classify_max_temp() function
-
 CREATE OR REPLACE FUNCTION classify_max_temp()
     RETURNS trigger AS
 $$
@@ -302,7 +273,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Listing 15-23: Creating the temperature_insert trigger
-
 CREATE TRIGGER temperature_insert
     BEFORE INSERT
     ON temperature_test
@@ -310,6 +280,7 @@ CREATE TRIGGER temperature_insert
     EXECUTE PROCEDURE classify_max_temp();
 
 -- Listing 15-24: Inserting rows to test the temperature_update trigger
+SET DATESTYLE = 'MDY';
 
 INSERT INTO temperature_test (station_name, observation_date, max_temp, min_temp)
 VALUES
@@ -323,12 +294,7 @@ SELECT * FROM temperature_test;
 --------------------------------------------------------------
 -- Try it yourself
 --------------------------------------------------------------
-
--- 1. Create a view that displays the number of New York City taxi trips per
--- hour. Use the taxi data in Chapter 11 and the query in Listing 11-8.
-
--- Answer:
-
+-- QUESTION1:
 CREATE VIEW nyc_taxi_trips_per_hour AS
     SELECT
          date_part('hour', tpep_pickup_datetime),
@@ -339,12 +305,8 @@ CREATE VIEW nyc_taxi_trips_per_hour AS
 
 SELECT * FROM nyc_taxi_trips_per_hour;
 
--- 2. In Chapter 10, you learned how to calculate rates per thousand. Turn that
--- formula into a rates_per_thousand() function that takes three arguments
--- to calculate the result: observed_number, base_number, and decimal_places.
-
--- Answer: This uses PL/pgSQL, but you could use a SQL function as well.
-
+-- QUESTION 2: 
+-- This uses PL/pgSQL, but you could use a SQL function as well.
 CREATE OR REPLACE FUNCTION
 rate_per_thousand(observed_number numeric,
                   base_number numeric,
@@ -359,23 +321,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Test the function:
-
 SELECT rate_per_thousand(50, 11000, 2);
 
--- 3. In Chapter 9, you worked with the meat_poultry_egg_inspect table that
--- listed food processing facilities. Write a trigger that automatically adds an
--- inspection date each time you insert a new facility into the table. Use the
--- inspection_date column added in Listing 9-19, and set the date to be six
--- months from the current date. You should be able to describe the steps needed
--- to implement a trigger and how the steps relate to each other.
-
--- Answer:
+-- QUESTION 3:
 -- a) Add the column
-
 ALTER TABLE meat_poultry_egg_inspect ADD COLUMN inspection_date date;
 
 -- b) Create the function that the trigger will execute.
-
 CREATE OR REPLACE FUNCTION add_inspection_date()
     RETURNS trigger AS $$
     BEGIN
@@ -385,7 +337,6 @@ CREATE OR REPLACE FUNCTION add_inspection_date()
 $$ LANGUAGE plpgsql;
 
 -- c) Create the trigger
-
 CREATE TRIGGER inspection_date_update
   BEFORE INSERT
   ON meat_poultry_egg_inspect
@@ -393,7 +344,6 @@ CREATE TRIGGER inspection_date_update
   EXECUTE PROCEDURE add_inspection_date();
 
 -- d) Test the insertion of a company and examine the result
-
 INSERT INTO meat_poultry_egg_inspect(est_number, company)
 VALUES ('test123', 'testcompany');
 
