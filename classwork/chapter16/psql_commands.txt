@@ -1,52 +1,38 @@
 --------------------------------------------------------------
--- Practical SQL: A Beginner's Guide to Storytelling with Data
--- by Anthony DeBarros
-
 -- Chapter 16 Code Examples
 --------------------------------------------------------------
-
-
 -- Connecting psql to a database on a local server
-
 psql -d [database name] -U [username]
 psql -d analysis -U postgres
 
 -- Changing user and database name
-
 \c [database name] [user name]
 \c gis_analysis postgres
 
 -- Listing 16-1: Entering a single-line query in psql
 -- Enter this at the psql prompt:
-
 SELECT geo_name FROM us_counties_2010 LIMIT 3;
 
 -- Listing 16-2: Entering a multi-line query in psql
 -- Type each line separately, followed by Enter
-
 SELECT geo_name
 FROM us_counties_2010
 LIMIT 3;
 
-
 -- Listing 16-3: Showing open parentheses in the psql prompt
-
 CREATE TABLE wineries (
 id bigint,
 winery_name varchar(100)
 );
 
 -- Listing 16-4: A query with scrolling results
-
 SELECT geo_name FROM us_counties_2010;
 
 -- Listings 16-5 and 16-6: Normal and expanded displays of results
 -- Use \x to toggle expanded on/off
-
 SELECT * FROM grades;
 
 -- Listing 16-7: Importing data using \copy
-
 DROP TABLE state_regions;
 
 CREATE TABLE state_regions (
@@ -57,7 +43,6 @@ CREATE TABLE state_regions (
 \copy state_regions FROM 'C:\YourDirectory\state_regions.csv' WITH (FORMAT CSV, HEADER);
 
 -- Listing 16-8: Saving query output to a file
-
 -- Enter psql settings
 \a \f , \pset footer
 
@@ -72,11 +57,8 @@ SELECT * FROM grades;
 -- Run the query and output
 SELECT * FROM grades;
 
-
 -- createdb: Create a database named box_office
-
 createdb -U postgres -e box_office
-
 
 -- Loading shapefiles into PostgreSQL
 
